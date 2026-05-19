@@ -1,0 +1,50 @@
+[
+    {
+        "id": 1,
+        "nombre": "HeladoSoft Pro 3000",
+        "marca": "HeladoSoft",
+        "modelo": "HS-P3000",
+        "tipo": "Helado",
+        "estado": "Activa"
+    },
+    {
+        "id": 2,
+        "nombre": "HeladoSoft Mini",
+        "marca": "HeladoSoft",
+        "modelo": "HS-MINI",
+        "tipo": "Helado",
+        "estado": "Mantenimiento"
+    },
+    {
+        "id": 3,
+        "nombre": "HeladoSoft Max",
+        "marca": "HeladoSoft",
+        "modelo": "HS-MAX",
+        "tipo": "Helado",
+        "estado": "Activa"
+    },
+    {
+        "id": 4,
+        "nombre": "Hielo Frost X1",
+        "marca": "Hielo",
+        "modelo": "HF-X1",
+        "tipo": "Hielo",
+        "estado": "Activa"
+    },
+    {
+        "id": 5,
+        "nombre": "Hielo Cube Master",
+        "marca": "Hielo",
+        "modelo": "HC-MASTER",
+        "tipo": "Hielo",
+        "estado": "Inactiva"
+    },
+    {
+        "id": 6,
+        "nombre": "Hielo Arctic Pro",
+        "marca": "Hielo",
+        "modelo": "HA-PRO",
+        "tipo": "Hielo",
+        "estado": "Activa"
+    }
+]
