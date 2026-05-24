@@ -9,6 +9,10 @@ const maquinasController = require('../controllers/maquinas.controller')
 
 //Traemos el middleware de máquinas para poder utilizar las funciones que tenemos ahí.
 const maquinasMiddleware = require('../middlewares')
+//Traemos el middleware de validación de esquemas para poder validar los datos que recibimos en las peticiones.
+const schemaValidarMaquina = require('../middlewares/schemaValidatorMiddleware')
+//Traemos el esquema de validación de máquinas para poder validar los datos que recibimos en las peticiones.
+const maquinasSchemas = require('../schemas/maquinas.schema')
 
 //Definimos las rutas de la aplicación. Cada ruta tiene un método HTTP (GET, POST, DELETE, etc.) y una función
 //que se ejecuta cuando se hace una petición a esa ruta. En este caso, estamos utilizando las funciones
@@ -20,6 +24,8 @@ route.get('/maquinas/:id', maquinasMiddleware.validaExisteMaquina,maquinasContro
 
 route.delete('/maquinas/:id',maquinasMiddleware.validaExisteMaquina, maquinasController.deleteMaquinaById)
 
-route.post('/maquinas',maquinasController.createMaquina)
+route.post('/maquinas',schemaValidarMaquina(maquinasSchemas),maquinasController.createMaquina)
+
+route.put('/maquinas/:id',schemaValidarMaquina(maquinasSchemas),maquinasMiddleware.validaExisteMaquina, maquinasController.updateMaquinaById)
 
 module.exports = route

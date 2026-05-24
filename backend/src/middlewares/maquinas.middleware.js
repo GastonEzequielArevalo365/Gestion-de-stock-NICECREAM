@@ -1,12 +1,12 @@
-//Traemos las máquinas desde el controlador porque el controlador es el encargado de manejar la lógica de negocio
-//En este caso, la lógica de negocio es verificar si una máquina existe o no.
-const {maquinas} = require('../controllers/maquinas.controller')
-
+//Los middlewares son funciones que se ejecutan antes de llegar al controlador, es decir, antes
+//de ejecutar la lógica de negocio de la ruta. Sirven para verificar que se cumplan ciertas condiciones antes
+//de ejecutar el controlador, como por ejemplo, verificar que exista una máquina con el id que se está pasando por parámetro, o
+// verificar que el usuario tenga permisos para acceder a esa ruta, etc.
 const middleware = {}
 
-const validaExisteMaquina = (req,res,next) =>{
+const validaExisteMaquina = async (req,res,next) =>{
     const id = req.params.id
-    const maquina = maquinas.find(m => m.id == id)
+    const maquina = await Maquinas.findByPk(id)
     if(!maquina){
         //Utilizamos el return porque en caso que no encuentre la máquina, no queremos que ejecute el next() y 
         //siga con la ejecución del código, sino que queremos que termine la ejecución de la función y devuelva la respuesta al
