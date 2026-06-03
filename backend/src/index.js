@@ -29,7 +29,7 @@ const routes = require('./routes')
 app.use(express.json())
 
 //Utilizamos las rutas que importamos anteriormente. Esto hace que el servidor pueda responder a las rutas.
-app.use(routes.maquinasRoute)
+app.use(routes.maquinasRoute,routes.palletsRoute,routes.racksRoute,routes.callesRoute)
 
 
 
