@@ -14,7 +14,7 @@ const PORT = 3001
 //Hacemos que el servidor escuche en el puerto definido anteriormente. Esto hace que el servidor siempre esté
 //escuchando las peticiones que le llegan a ese puerto y respondiendo a ellas.
 app.listen(PORT, async() => {
-    console.log(`E//e servidor está escuchando en el puerto ${PORT}`)
+    console.log(`Servidor está escuchando en el puerto ${PORT}`)
     //Esto lo hacemos solo en desarrollo para sincronizar el modelo con la base de datos.
     //Descomentar si hay cambios en el modelo y queremos que se reflejen en la base de datos.
     //Si se borra el comentario, se dropea la base de datos.
