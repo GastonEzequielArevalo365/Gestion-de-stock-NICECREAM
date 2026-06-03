@@ -9,18 +9,26 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Maquinas extends Model {
+  class Maquina extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      //Este método permite definir las asociaciones entre los modelos, es decir, las relaciones entre las tablas.
+      //Por ejemplo en maquinas debo tener belongto pallet, porque muchas máquinas pueden estar en un mismo pallet
+      //pero cada máquina solo puede estar en un pallet.
+      Maquina.belongsTo(models.Pallet,{
+        //La foreignKey se genera del lado de la tabla que va tener la clave foránea, en este caso, la tabla de máquinas va a 
+        //tener la clave foránea pallet_id que hace referencia al id del pallet al que pertenece esa máquina.
+        foreignKey:'pallet_id',
+        as:'pallet'
+      })
     }
   }
   //Maquinas.init: Es una función que nos permite definir el modelo de la tabla "Maquinas" con sus atributos y tipos de datos.
-  Maquinas.init({
+  Maquina.init({
     nombre: DataTypes.STRING,
     cantidad: DataTypes.INTEGER,
     alto: DataTypes.DOUBLE,
@@ -31,11 +39,8 @@ module.exports = (sequelize, DataTypes) => {
     categoria: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'Maquinas',
-    //Si el modelo estaba en singular, la tabla se llamaría "Maquina", pero al estar en plural, se llama "Maquinas"
-    //tableName es un atributo que nos permite especificar el nombre de la tabla en la base de datos, en este caso "maquinas"
-    tableName: 'maquinas',
-    //timestamps:false
+    modelName: 'Maquina',
+    timestamps:false
   });
-  return Maquinas;
+  return Maquina;
 };

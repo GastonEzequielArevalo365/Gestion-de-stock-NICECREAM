@@ -5,9 +5,13 @@
 //joi es una librería de validación de datos, nos permite definir esquemas de validación para nuestros datos y luego
 // validar los datos contra esos esquemas.
 const Joi = require('joi')
-
+//Aquí estamos definiendo el esquema de validación para las máquinas, utilizando la librería Joi. Cada campo del esquema tiene
+// sus propias condiciones de validación, como por ejemplo, el nombre es un string obligatorio, la cantidad es un número.
 const maquinasSchemas= Joi.object().keys({
     nombre: Joi.string().required().min(3).max(50).messages({
+        //Aquí estamos definiendo los mensajes de error personalizados para cada una de las condiciones de validación del
+        // campo nombre, como por ejemplo, si el nombre no es un string, si no se envía el nombre, si el nombre es muy 
+        //corto o muy largo, etc.
         "any.required":"El nombre es obligatorio",
         "string.min" : "El nombre debe tener al menos {#limit} caracteres",
         "string.max" : "El nombre debe tener como máximo {#limit} caracteres",
@@ -15,13 +19,33 @@ const maquinasSchemas= Joi.object().keys({
     }),
     //Aquí estamos definiendo que la cantidad debe ser un número, que no puede ser negativo, y que es opcional, es decir, que
     //no es obligatorio que se envíe en la petición, pero si se envía, debe cumplir con esas condiciones.
-    cantidad: Joi.number().min(0),
-    alto: Joi.number().min(0),
-    ancho: Joi.number().min(0),
-    profundidad: Joi.number().min(0),
-    peso: Joi.number().min(0),
-    imagen: Joi.string().uri(),
-    categoria: Joi.string().required().min(3).max(100)
+    cantidad: Joi.number().min(0).messages({
+        "number.min":"La cantidad de máquinas no puede ser negativa"
+    }),
+    alto: Joi.number().min(0).messages({
+        "number.min":"El alto de la máquina no puede ser negativo"
+    }),
+    ancho: Joi.number().min(0).messages({
+        "number.min":"El ancho de la máquina no puede ser negativo"
+    }),
+    profundidad: Joi.number().min(0).messages({
+        "number.min":"La profundidad de la máquina no puede ser negativa"
+    }),
+    peso: Joi.number().min(0).messages({
+        "number.min":"El peso de la máquina no puede ser negativo"
+    }),
+    imagen: Joi.string(),
+    categoria: Joi.string().required().min(3).max(50).messages({
+        "any.required":"La categoría es obligatoria",
+        "string.min" : "La categoría debe tener al menos {#limit} caracteres",
+        "string.max" : "La categoría debe tener como máximo {#limit} caracteres",
+        "string.empty" : "La categoría no puede estar vacía"
+    }),
+    pallet_id: Joi.number().integer().min(1).required().messages({
+        "any.required":"El id del pallet es obligatorio",
+        "number.base":"El id del pallet debe ser un número",
+        "number.min":"El id del pallet debe ser un número positivo"
+    })
 })
 
 module.exports = maquinasSchemas
