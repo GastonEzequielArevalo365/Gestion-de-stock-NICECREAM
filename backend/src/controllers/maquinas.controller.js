@@ -1,11 +1,11 @@
 //Los controladores son los encargador de manejar la lógica de negocio de las rutas, es decir, lo que se va a hacer
 //cuando se reciba una petición a una ruta determinada. En este caso, el controlador "maquinas.controller.js"
-const {Maquinas} = require('../models')
+const {Maquina,Pallet} = require('../models')
 
 const controller = {}
 
 const getAllMaquinas = async (req,res) => {
-    const data = await Maquinas.findAll()
+    const data = await Maquina.findAll()
     res.status(200).json(data)
 }
 
@@ -13,7 +13,10 @@ controller.getAllMaquinas = getAllMaquinas
 
 const getMaquinaById = async(req,res) => {
     const id = req.params.id
-    const data = await Maquinas.findByPk(id)
+    const data = await Maquina.findOne({
+        where:{id},
+        include:{model: Pallet,as:'pallet'}
+    })
     res.status(200).json(data)
 }
 
@@ -21,7 +24,7 @@ controller.getMaquinaById = getMaquinaById
 
 const deleteMaquinaById = async(req,res) => {
     const id = req.params.id
-    const r = await Maquinas.destroy({where:{id}})
+    const r = await Maquina.destroy({where:{id}})
     console.log({mensaje:`Filas afectadas:${(r)}`})
     res.status(200).json({message: `La máquina con id ${id} fue eliminada`})
 }
@@ -29,8 +32,8 @@ const deleteMaquinaById = async(req,res) => {
 controller.deleteMaquinaById = deleteMaquinaById
 
 const createMaquina = async(req,res) => {
-    const{nombre,cantidad,alto,ancho,profundidad,peso,imagen,categoria} = req.body    
-    const nuevaMaquina = await Maquinas.create({
+    const{nombre,cantidad,alto,ancho,profundidad,peso,imagen,categoria,pallet_id} = req.body    
+    const nuevaMaquina = await Maquina.create({
         nombre,
         cantidad,
         alto,
@@ -38,17 +41,19 @@ const createMaquina = async(req,res) => {
         profundidad,
         peso,
         imagen,
-        categoria
+        categoria,
+        pallet_id
     })
     res.status(201).json(nuevaMaquina)
 }
 
 controller.createMaquina = createMaquina
 
+
 const updateMaquinaById = async(req,res)=>{
     const id = req.params.id
-    const{nombre,cantidad,alto,ancho,profundidad,peso,imagen,categoria} = req.body
-    const maquina = await Maquinas.findByPk(id)
+    const{nombre,cantidad,alto,ancho,profundidad,peso,imagen,categoria,pallet_id} = req.body
+    const maquina = await Maquina.findByPk(id)
     maquina.nombre = nombre
     maquina.cantidad = cantidad
     maquina.alto = alto
@@ -57,6 +62,7 @@ const updateMaquinaById = async(req,res)=>{
     maquina.peso = peso
     maquina.imagen = imagen
     maquina.categoria = categoria
+    maquina.pallet_id = pallet_id
     await maquina.save()
     res.status(200).json(maquina)
 }
