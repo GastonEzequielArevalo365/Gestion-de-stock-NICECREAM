@@ -1,4 +1,4 @@
-const {Rack} = require ('../models')
+const {Rack,Calle,Pallet} = require ('../models')
 
 const controller = {}
 
@@ -11,7 +11,18 @@ controller.getAllRacks = getAllRacks
 
 const getRackById = async(req,res) =>{
     const id = req.params.id
-    const data = await Rack.findByPk(id)
+    const data = await Rack.findOne({
+        where:{id},
+        include:[{
+            model:Calle,
+            as:'calle'
+        },
+        {
+            model:Pallet,
+            as:'pallets'
+        }
+    ]
+    })
     res.status(200).json(data)
 }
 
@@ -39,10 +50,11 @@ controller.createRack = createRack
 
 const updateRackById = async(req,res) =>{
     const id = req.params.id
-    const{numero,lado} = req.body
+    const{numero,lado,calle_id} = req.body
     const rack = await Rack.findByPk(id)
     rack.numero = numero
     rack.lado = lado
+    rack.calle_id = calle_id
     await rack.save()
     res.status(200).json(rack)
 }

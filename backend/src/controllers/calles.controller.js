@@ -1,4 +1,4 @@
-const {Calle} = require('../models')
+const {Calle,Rack} = require('../models')
 
 const controller = {}
 
@@ -11,7 +11,13 @@ controller.getAllCalles = getAllCalles
 
 const getCallesById = async(req,res) => {
     const id = req.params.id
-    const data = await Calle.findByPk(id)
+    const data = await Calle.findOne({
+        where:{id},
+        include:{
+            model:Rack,
+            as:'racks'
+        }
+    })
     res.status(200).json(data)
 }
 

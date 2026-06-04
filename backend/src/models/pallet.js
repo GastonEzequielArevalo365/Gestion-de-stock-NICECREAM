@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey:'pallet_id',
         as:'maquinas'
       })
+      Pallet.belongsTo(models.Rack,{
+        foreignKey:'rack_id',
+        as:'rack'
+      })
     }
   }
   Pallet.init({

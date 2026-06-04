@@ -11,6 +11,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Rack.hasMany(models.Pallet,{
+        foreignKey:'rack_id',
+        as:'pallets'
+      })
+      Rack.belongsTo(models.Calle,{
+        foreignKey:'calle_id',
+        as:'calle'
+      })
     }
   }
   Rack.init({
@@ -19,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Rack',
+    timestamps:false
   });
   return Rack;
 };

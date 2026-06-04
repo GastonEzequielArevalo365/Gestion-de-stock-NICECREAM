@@ -1,6 +1,6 @@
 //Los controladores son los encargador de manejar la lógica de negocio de las rutas, es decir, lo que se va a hacer
 //cuando se reciba una petición a una ruta determinada. En este caso, el controlador "maquinas.controller.js"
-const {Maquina,Pallet} = require('../models')
+const {Maquina,Pallet,Rack,Calle} = require('../models')
 
 const controller = {}
 
@@ -15,7 +15,18 @@ const getMaquinaById = async(req,res) => {
     const id = req.params.id
     const data = await Maquina.findOne({
         where:{id},
-        include:{model: Pallet,as:'pallet'}
+        include:{
+            model: Pallet,
+            as:'pallet',
+            include:{
+                model:Rack,
+                as:'rack',
+                include:{
+                    model:Calle,
+                    as:'calle'
+                }
+            }
+        }
     })
     res.status(200).json(data)
 }
@@ -42,7 +53,6 @@ const createMaquina = async(req,res) => {
         peso,
         imagen,
         categoria,
-        pallet_id
     })
     res.status(201).json(nuevaMaquina)
 }

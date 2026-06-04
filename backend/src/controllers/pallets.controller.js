@@ -1,4 +1,4 @@
-const {Pallet} = require('../models')
+const {Pallet,Maquina,Rack,Calle} = require('../models')
 
 const controller = {}
 
@@ -13,7 +13,22 @@ module.exports = controller
 
 const getPalletById = async(req,res) =>{
     const id = req.params.id
-    const data = await Pallet.findByPk(id)
+    const data = await Pallet.findOne({
+        where: {id},
+        include:[{
+            model: Maquina,
+            as:'maquinas'
+        },
+        {
+            model: Rack,
+            as:'rack',
+            include:{
+                model: Calle,
+                as:'calle'
+            }
+        }
+    ]
+    })
     res.status(200).json(data)
 }
 
