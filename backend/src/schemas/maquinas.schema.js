@@ -34,17 +34,12 @@ const maquinasSchemas= Joi.object().keys({
     peso: Joi.number().min(0).messages({
         "number.min":"El peso de la máquina no puede ser negativo"
     }),
-    imagen: Joi.string(),
+    imagen: Joi.string().allow(""),
     categoria: Joi.string().required().min(3).max(50).messages({
         "any.required":"La categoría es obligatoria",
         "string.min" : "La categoría debe tener al menos {#limit} caracteres",
         "string.max" : "La categoría debe tener como máximo {#limit} caracteres",
         "string.empty" : "La categoría no puede estar vacía"
-    }),
-    pallet_id: Joi.number().integer().min(1).required().messages({
-        "any.required":"El id del pallet es obligatorio",
-        "number.base":"El id del pallet debe ser un número",
-        "number.min":"El id del pallet debe ser un número positivo"
     })
 })
 

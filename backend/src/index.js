@@ -2,6 +2,10 @@
 //y usar rutas de manera más fácil.
 const express = require('express')
 
+const path = require('path');
+
+const cors = require('cors')
+
 //Ejecutammos el siguiente comando que crea la aplicación web (Todavía no está escuchando nada, solo creando).
 const app = express()
 
@@ -13,7 +17,7 @@ const PORT = 3001
 
 //Hacemos que el servidor escuche en el puerto definido anteriormente. Esto hace que el servidor siempre esté
 //escuchando las peticiones que le llegan a ese puerto y respondiendo a ellas.
-app.listen(PORT, async() => {
+app.listen(PORT,"0.0.0.0", async() => {
     console.log(`Servidor está escuchando en el puerto ${PORT}`)
     //Esto lo hacemos solo en desarrollo para sincronizar el modelo con la base de datos.
     //Descomentar si hay cambios en el modelo y queremos que se reflejen en la base de datos.
@@ -28,8 +32,14 @@ const routes = require('./routes')
 //Utilizamos la siguiente función para que el servidor pueda entender el formato JSON que le enviamos.
 app.use(express.json())
 
+app.use(cors())
+
 //Utilizamos las rutas que importamos anteriormente. Esto hace que el servidor pueda responder a las rutas.
 app.use(routes.maquinasRoute,routes.palletsRoute,routes.racksRoute,routes.callesRoute)
 
+app.use(
+    '/uploads',
+    express.static(path.join(__dirname, '..', 'uploads'))
+);
 
 

@@ -5,9 +5,26 @@ const {Maquina,Pallet,Rack,Calle} = require('../models')
 const controller = {}
 
 const getAllMaquinas = async (req,res) => {
-    const data = await Maquina.findAll()
+    const data = await Maquina.findAll({
+        where:{activo:true},
+        include:[
+            {
+                association: 'pallet',
+                include:[
+                    {
+                        association: 'rack',
+                        include:[
+                            {
+                                association: 'calle'
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    })
     res.status(200).json(data)
-}
+}   
 
 controller.getAllMaquinas = getAllMaquinas
 
@@ -35,7 +52,7 @@ controller.getMaquinaById = getMaquinaById
 
 const deleteMaquinaById = async(req,res) => {
     const id = req.params.id
-    const r = await Maquina.destroy({where:{id}})
+    const r = await Maquina.update({activo:false},{where:{id}})
     console.log({mensaje:`Filas afectadas:${(r)}`})
     res.status(200).json({message: `La máquina con id ${id} fue eliminada`})
 }
@@ -78,5 +95,17 @@ const updateMaquinaById = async(req,res)=>{
 }
 
 controller.updateMaquinaById = updateMaquinaById
+
+const importStock = async (req,res) =>{
+    const maquinas = req.body
+    console.log("DATOS A INSERTAR:", maquinas);
+    await Maquina.bulkCreate(maquinas)
+    res.status(201).json({
+        ok:true,
+        mensaje:"Maquinas importadas correctamente"
+    })
+}
+
+controller.importStock = importStock
 
 module.exports = controller

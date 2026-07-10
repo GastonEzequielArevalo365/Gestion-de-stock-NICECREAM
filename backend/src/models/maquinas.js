@@ -36,7 +36,10 @@ module.exports = (sequelize, DataTypes) => {
     profundidad: DataTypes.DOUBLE,
     peso: DataTypes.DOUBLE,
     imagen: DataTypes.STRING,
-    categoria: DataTypes.STRING
+    categoria: DataTypes.STRING,
+    activo: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true}
   }, {
     sequelize,
     modelName: 'Maquina',

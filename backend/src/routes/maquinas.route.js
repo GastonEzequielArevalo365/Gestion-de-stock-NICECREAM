@@ -22,5 +22,6 @@ route.get('/maquinas/:id',maquinasMiddleware.validaExisteMaquina,maquinasControl
 route.delete('/maquinas/:id',maquinasMiddleware.validaExisteMaquina, maquinasController.deleteMaquinaById)
 route.post('/maquinas',schemaValidarMaquina(maquinasSchemas),maquinasController.createMaquina)
 route.put('/maquinas/:id',schemaValidarMaquina(maquinasSchemas),maquinasMiddleware.validaExisteMaquina, maquinasController.updateMaquinaById)
+route.post('/maquinas/import',maquinasController.importStock)
 
 module.exports = route
