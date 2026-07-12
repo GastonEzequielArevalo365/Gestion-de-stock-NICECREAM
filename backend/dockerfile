@@ -1,0 +1,28 @@
+#Docker file es un archivo que indica paso a paso como construir el entorno donde va a ejecutarse la aplicación.
+
+FROM node:22-alpine 
+#Esta línea indica la imagen base en este caso usaremos la versión 22 basada en Alpine Linux.
+#Alpine es una distribución muy liviana, por lo que las imagenes ocupan menos espacio.
+
+WORKDIR /app
+#Define el directorio de trabajo del contenedor.
+#Si la carpeta /app no existe, Docker la crea automáticamente.
+#Todos los comandos como (COPY,RUN,CMD,etc) Se ejecutarán desde esa carpeta.
+
+COPY package*.json ./
+#Copia package.json y package-lock.json desde la pc al contenedor.
+#./ significa que los copia al directorio actual, que es /app
+
+RUN npm install
+#Ejecuta el comando una sola vez mientas se ejecuta la imagen.
+#Instala todas las dependencias del proyecto.
+
+COPY . .
+#Copia todo el contenido del proyecto al contenedor.
+
+EXPOSE 3001
+#Indica que la aplicación escucha en el puerto 3001
+#No abre el puerto por sí solo; simplemente documenta cual es su aplicación.
+
+CMD ["npm","start"]
+#Al ejecutarse las anteriores partes el CMD ejecuta el comando para inicar la aplicación.
