@@ -1,45 +1,32 @@
-//Traemos la librería express que instalamos anteriormente con npm. Express nos ayuda a crear un servidor local
-//y usar rutas de manera más fácil.
-const express = require('express')
 
-const path = require('path');
+const express = require('express');
+const path = require('path'); 
+const cors = require('cors');
+const multer = require('multer');
 
-const cors = require('cors')
+const { sequelize } = require('./models'); // Ajustá la ruta si tu carpeta models está en otra ubicación (ej: './src/models')
 
-//Ejecutammos el siguiente comando que crea la aplicación web (Todavía no está escuchando nada, solo creando).
-const app = express()
+const app = express();
+const routes = require('./routes');
+const PORT = 3001;
 
-//Traemos la base de datos que creamos con Sequelize. Esto nos permite interactuar con la base de datos desde este archivo.
-const db = require('./models')
+app.use(cors());
+app.use(express.json());
 
-//Definimos el puerto en el que el servidor va a estar escuchando. 
-const PORT = 3001
+// Servir estáticos
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+// Montar rutas individualmente 
+app.use('/', routes.racksRoute);
+app.use('/', routes.callesRoute);
+app.use('/', routes.palletsRoute);
+app.use('/', routes.maquinasRoute);
 
-//Hacemos que el servidor escuche en el puerto definido anteriormente. Esto hace que el servidor siempre esté
-//escuchando las peticiones que le llegan a ese puerto y respondiendo a ellas.
-app.listen(PORT,"0.0.0.0", async() => {
-    console.log(`Servidor está escuchando en el puerto ${PORT}`)
-    //Esto lo hacemos solo en desarrollo para sincronizar el modelo con la base de datos.
-    //Descomentar si hay cambios en el modelo y queremos que se reflejen en la base de datos.
-    //Si se borra el comentario, se dropea la base de datos.
-    //db.sequelize.sync({force:true}) sincroniza los modelos de models con la base de datos.
-    //db.sequelize.sync({force:true})
-})
-
-//Traemos las rutas que creamos en el archivo src/routes/index.js
-const routes = require('./routes')
-
-//Utilizamos la siguiente función para que el servidor pueda entender el formato JSON que le enviamos.
-app.use(express.json())
-
-app.use(cors())
-
-//Utilizamos las rutas que importamos anteriormente. Esto hace que el servidor pueda responder a las rutas.
-app.use(routes.maquinasRoute,routes.palletsRoute,routes.racksRoute,routes.callesRoute)
-
-app.use(
-    '/uploads',
-    express.static(path.join(__dirname, '..', 'uploads'))
-);
-
-
+sequelize.sync({ force: false }).then(() => {
+    console.log("Base de datos reiniciada por completo.");
+    
+    app.listen(PORT, "0.0.0.0", () => {
+        console.log(`Servidor escuchando en el puerto ${PORT}`);
+    });
+}).catch((error) => {
+    console.error("Error al sincronizar la base de datos:", error);
+});
